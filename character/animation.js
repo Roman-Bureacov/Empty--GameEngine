@@ -29,10 +29,9 @@ class Animator {
      * is called once the animation has completed
      */
     constructor(spritesheet, frames, frameDelay, isLooping = true, callback = undefined) {
-        Object.assign(this, { spritesheet, frames, frameDelay, isLooping, callback })
+        Object.assign(this, { spritesheet, frames, frameDelay, isLooping, callback });
 
         this.elapsedTime = 0;
-        this.totalTime = frames.length * frameDelay;
     }
 
     draw(timeStep, context, x, y, scaleX, scaleY) {
@@ -41,7 +40,7 @@ class Animator {
         let frameNumber = this.currentFrame();
 
         // if at the last frame...
-        if (frameNumber === this.frames.length - 1) this.isLooping ? this.elapsedTime = 0 : this.callback?.()
+        if (frameNumber === this.frames.length - 1) this.isLooping ? this.elapsedTime = 0 : this.callback?.();
 
         let frame = this.frames[frameNumber];
         let frameCoord = this.spritesheet.get(frame[0], frame[1]);
