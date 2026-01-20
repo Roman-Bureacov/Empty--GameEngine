@@ -11,7 +11,13 @@ class AwesomeCharacter extends Character {
         this.state = this.states.IDLE;
         this.facing = Character.DIRECTION.RIGHT;
 
-        this.velocityMax.x = 10;
+        this.velocityMax.x = 100;
+
+        this.constantAcceleration = {
+            [Character.DIRECTION.LEFT] : 0,
+            [Character.DIRECTION.RIGHT] : 0,
+        };
+        this.lastState = this.state;
 
         this.setupAnimation();
         this.setupKeymap();
@@ -45,7 +51,7 @@ class AwesomeCharacter extends Character {
                 false,
                 () => {
                     this.stateLock = false;
-                    this.setState(this.states.IDLE);
+                    this.state = this.lastState;
                     this.facing = Character.DIRECTION.RIGHT;
                 }
             ),
@@ -56,7 +62,7 @@ class AwesomeCharacter extends Character {
                 false,
                 () => {
                     this.stateLock = false;
-                    this.setState(this.states.IDLE);
+                    this.state = this.lastState;
                     this.facing = Character.DIRECTION.LEFT;
                 }
             ),
@@ -72,33 +78,42 @@ class AwesomeCharacter extends Character {
             [KeyMapper.getName("KeyD", true)] : "move right",
             [KeyMapper.getName("KeyA", true)] : "move left",
             [KeyMapper.getName("KeyS", true)] : "attack",
-            [KeyMapper.getName("KeyD", false)] : "stop",
-            [KeyMapper.getName("KeyA", false)] : "stop",
+            [KeyMapper.getName("KeyD", false)] : "stop right",
+            [KeyMapper.getName("KeyA", false)] : "stop left",
         };
 
         this.keymapper.outputMap = {
-            "move right" : () => this.move(100),
-            "move left" : () => this.move(-100),
+            "move right" : () => this.move(150),
+            "move left" : () => this.move(-150),
             "attack" : () => this.swing(),
-            "stop" : () => this.stopMoving(),
+            "stop right" : () => this.stopMoving(Character.DIRECTION.RIGHT),
+            "stop left" : () => this.stopMoving(Character.DIRECTION.LEFT),
         };
     }
 
     move(acceleration) {
         if (!this.setState(this.states.MOVE)) {
-            this.acceleration.x = acceleration;
-            this.facing = acceleration < 0 ? Character.DIRECTION.LEFT : Character.DIRECTION.RIGHT;
+            const newFacing = acceleration < 0 ? Character.DIRECTION.LEFT : Character.DIRECTION.RIGHT;
+            if (newFacing !== this.facing) {
+                this.velocity.x /= 2;
+                this.facing = newFacing;
+            }
+
+            this.constantAcceleration[this.facing] = acceleration;
+
         }
     }
 
-    stopMoving() {
-        if (this.setState(this.states.IDLE)) {
-            this.velocity.x /= 10;
-        }
+    stopMoving(facing) {
+        this.constantAcceleration[facing] = 0;
     }
 
     swing() {
-        this.setState(this.states.ATTACK);
+        if (!this.stateLock) {
+            this.lastState = this.state;
+            this.state = this.states.ATTACK;
+            this.stateLock = true;
+        }
     }
 
     update() {
@@ -109,14 +124,21 @@ class AwesomeCharacter extends Character {
 
         ({
             [this.states.ATTACK] : () => {
-                this.stateLock = true;
+                this.velocity.x /= 1.05;
             },
             [this.states.MOVE] : () => {
+                this.acceleration.x =
+                    this.constantAcceleration[Character.DIRECTION.LEFT]
+                    + this.constantAcceleration[Character.DIRECTION.RIGHT];
 
+                if (this.acceleration.x === 0) {
+                    this.setState(this.states.IDLE);
+                }
             },
             [this.states.IDLE] : () => {
                 this.velocity.x /= 1.05;
             }
         })[this.state]?.();
+
     }
 }
