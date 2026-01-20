@@ -26,7 +26,7 @@ class Character {
 
     /**
      * The map of animations for this character.
-     * @type {{String : Animator}} the mapping of an animation name to its corresponding animator object
+     * @type {{[p: string]: Animator}} the mapping of an animation name to its corresponding animator object
      */
     animations = { };
 
