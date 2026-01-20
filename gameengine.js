@@ -1,6 +1,14 @@
 // This game shell was happily modified from Googler Seth Ladd's "Bad Aliens" game and his Google IO talk in 2011
 
 class GameEngine {
+
+    /**
+     * The map of key codes registered before the loop iteration
+     * @type {{string : KeyboardEvent}} the map of key codes to their event details
+     */
+    keys = {};
+
+
     constructor(options) {
         // What you will use to draw
         // Documentation: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
@@ -13,7 +21,6 @@ class GameEngine {
         this.click = null;
         this.mouse = null;
         this.wheel = null;
-        this.keys = {};
 
         // Options and the Details
         this.options = options || {
@@ -82,9 +89,7 @@ class GameEngine {
 
         const acknowledge = (event) => {
 
-            for (let entity in this.entities) {
-                this.entities[entity].acknowledge(event);
-            }
+            this.keys[event.code] = event;
 
             if (this.options.debugging) {
                 console.log(event);
@@ -132,8 +137,9 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
+        this.keys = {};
     };
 
-};
+}
 
 // KV Le was here :)

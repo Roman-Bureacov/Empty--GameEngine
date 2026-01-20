@@ -84,10 +84,10 @@ class AwesomeCharacter extends Character {
 
     /**
      * Tells this character that a key event has occurred.
-     * @param keyEvent the key event to process
+     * @param keyList the list of key event to process
      */
-    acknowledge(keyEvent) {
-        this.keymapper.send(keyEvent);
+    acknowledge(keyList) {
+        for (let key in keyList) this.keymapper.send(key);
     }
 
     move(dx) {
@@ -106,6 +106,8 @@ class AwesomeCharacter extends Character {
     }
 
     update() {
+        for (let key in this.game.keys) this.keymapper.sendKeyEvent(this.game.keys[key]);
+
         ({
             [this.states.ATTACK] : () => {
                 this.stateLock = true;

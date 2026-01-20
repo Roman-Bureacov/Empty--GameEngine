@@ -22,11 +22,19 @@ class KeyMapper {
     }
 
     /**
-     * Sends the key name for the keymapper to look up the function and call it
+     * Sends and translates the key for the keymapper to look up the function and call it
      * @param keyEvent the key event to look up with
      */
-    send(keyEvent) {
+    sendKeyEvent(keyEvent) {
         this.outputMap[this.inputMap[KeyMapper.keyName(keyEvent)]]?.();
+    }
+
+    /**
+     * Sends the key name for the keymapper to look up the function and call it
+     * @param keyName
+     */
+    sendKeyName(keyName) {
+        this.outputMap[this.inputMap[keyName]]?.();
     }
 
     /**

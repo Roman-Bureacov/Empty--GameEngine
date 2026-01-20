@@ -4,7 +4,7 @@ gameEngine.options = {
 };
 
 const ASSET_MANAGER = new AssetManager();
-ASSET_MANAGER.queueDownload("../img/Guy.png");
+ASSET_MANAGER.queueDownload("./img/Guy.png");
 
 var char;
 
@@ -15,7 +15,7 @@ ASSET_MANAGER.downloadAll(() => {
 
 	gameEngine.init(ctx);
 
-	let img = ASSET_MANAGER.getAsset("../img/Guy.png");
+	let img = ASSET_MANAGER.getAsset("./img/Guy.png");
 	let c = char = new AwesomeCharacter(gameEngine, img);
 	c.position.y = 250;
 	gameEngine.addEntity(c);
