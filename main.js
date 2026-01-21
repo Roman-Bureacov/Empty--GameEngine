@@ -19,7 +19,7 @@ ASSET_MANAGER.downloadAll(() => {
 
 	let img = ASSET_MANAGER.getAsset(imgName);
 	let c = char = new AwesomeCharacter(gameEngine, img);
-	c.position.y = 250;
+	c.position.y = 125;
 	gameEngine.addEntity(c);
 
 	gameEngine.start();

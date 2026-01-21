@@ -138,6 +138,8 @@ class GameEngine {
         this.update();
         this.draw();
         this.keys = {};
+
+        // TODO: entity should loop back around when off the screen bounds
     };
 
 }

@@ -122,6 +122,10 @@ class AwesomeCharacter extends Character {
         this.acceleration.y = 0;
         for (let key in this.game.keys) this.keymapper.sendKeyEvent(this.game.keys[key]);
 
+        // hard-coded gobbledegook
+        if (this.position.x > 1000) this.position.x = -100;
+        else if (this.position.x < -100) this.position.x = 1000;
+
         ({
             [this.states.ATTACK] : () => {
                 this.velocity.x /= 1.05;
