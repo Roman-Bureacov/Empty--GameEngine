@@ -2,6 +2,8 @@ class AwesomeCharacter extends Character {
     constructor(game, image) {
         super(game, image);
 
+        this.spritesheet = new Spritesheet(this.image, 3, 14);
+
         this.states = Object.freeze({
             MOVE : "move ",
             ATTACK : "attack ",
@@ -144,5 +146,11 @@ class AwesomeCharacter extends Character {
             }
         })[this.state]?.();
 
+        switch(this.state) {
+            case this.states.ATTACK:
+
+        }
+
     }
+
 }
