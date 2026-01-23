@@ -1,1 +1,1 @@
-# [See it in action!](https://github.com/Roman-Bureacov/00---Animation/deployments/github-pages)
+# [See it in action!](https://roman-bureacov.github.io/00---Animation/)
