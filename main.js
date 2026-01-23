@@ -52,6 +52,7 @@ ASSET_MANAGER.downloadAll(() => {
 
 	let img = ASSET_MANAGER.getAsset(imgName);
 	let c = char = new AwesomeCharacter(gameEngine, img);
+	c.position.x = 500 - c.spritesheet.width/2;
 	c.position.y = 190;
 	gameEngine.addEntity(c);
 	gameEngine.addEntity(background);
