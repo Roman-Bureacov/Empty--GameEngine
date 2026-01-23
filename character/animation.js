@@ -12,13 +12,17 @@ export class Animator {
      * the first entry is the row and the second is the column in the spritesheet matrix; the frames should
      * be sorted from the start of the animation to the end of the animation
      * @param duration the total duration of this animation
+     * @param [reversed=false] if the animation should reverse the individual frames
      * @param {{ [key: Number]: Audio}} [soundMap=undefined] the map of zero-indexed frame numbers to their audio object
      * @param [isLooping=true] if the animation should loop
      * @param [callback=undefined] if the animation does not loop, this no-argument callback
      * is called once the animation has completed
      */
-    constructor(spritesheet, frames, duration, soundMap = undefined, isLooping = true, callback = undefined) {
-        Object.assign(this, { spritesheet, frames, duration, soundMap, isLooping, callback });
+    constructor(spritesheet,
+                frames, duration, reversed = false,
+                soundMap = undefined,
+                isLooping = true, callback = undefined) {
+        Object.assign(this, { spritesheet, frames, duration, reversed, soundMap, isLooping, callback });
 
         this.lastFrame = -1;
 
@@ -41,12 +45,24 @@ export class Animator {
         let frame = this.frames[frameNumber];
         let frameCoord = this.spritesheet.get(frame[0], frame[1]);
 
-        context.drawImage(this.spritesheet.image,
-            frameCoord.x, frameCoord.y,
-            this.spritesheet.width, this.spritesheet.height,
-            x, y,
-            this.spritesheet.width * scaleX, this.spritesheet.height * scaleY
+        if (this.reversed) {
+            context.save();
+            context.scale(-1, 1);
+            context.drawImage(this.spritesheet.image,
+                frameCoord.x, frameCoord.y,
+                this.spritesheet.width, this.spritesheet.height,
+                -x - this.spritesheet.width, y,
+                this.spritesheet.width * scaleX, this.spritesheet.height * scaleY
             );
+            context.restore();
+        } else {
+            context.drawImage(this.spritesheet.image,
+                frameCoord.x, frameCoord.y,
+                this.spritesheet.width, this.spritesheet.height,
+                x, y,
+                this.spritesheet.width * scaleX, this.spritesheet.height * scaleY
+            );
+        }
 
     }
 
